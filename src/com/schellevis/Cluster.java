@@ -35,6 +35,7 @@ public class Cluster {
 
     public void recalculateCenter(){
         int numberOfPoints = points.size();
+
         for(Map.Entry<Integer, Double> item : centerCluster.getItems().entrySet()){
             double sum = 0;
             for (Costumer costumer : points){
@@ -42,5 +43,16 @@ public class Cluster {
             }
             centerCluster.updateItems(item.getKey(),(sum / numberOfPoints));
         }
+    }
+
+    public double sumOfError(){
+        double sum = 0;
+        for(Map.Entry<Integer, Double> item : centerCluster.getItems().entrySet()){
+            for (Costumer costumer : points) {
+                double valueCostumer = costumer.getItems().get(item.getKey());
+                sum += Math.pow((item.getValue() - valueCostumer), 2);
+            }
+        }
+        return sum;
     }
 }

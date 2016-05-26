@@ -14,5 +14,8 @@ public class Main {
 
         Calculation cal = new Calculation();
         cal.createClusters(costumers,4);
+
+        //TODO: Sum of squared errors
+
     }
 }
