@@ -18,8 +18,9 @@ public class Calculation {
 
 
     public void createClusters(ArrayList<Costumer> costumers, int numberOfClusters){
-        for (int numberOfTry = 0; numberOfTry <= 50; numberOfTry++){
+        for (int numberOfTry = 0; numberOfTry <= 40; numberOfTry++){
             clusters = new ArrayList<>();
+            centroids = new ArrayList<>();
             for (int i = 0; i < numberOfClusters; i++) {
                 int clusterNR = rand.nextInt(costumers.size());
                 centroids.add(costumers.get(clusterNR));
@@ -29,7 +30,8 @@ public class Calculation {
                 calculateDistance(c,numberOfClusters);
             }
 
-            for (int i = 0; i < 50; i++) {
+            for (int i = 0; i < 20; i++) {
+                int counter = 0;
                 for (Cluster c : clusters) {
                     c.recalculateCenter();
                     c.emptyPoints();
@@ -37,6 +39,8 @@ public class Calculation {
                     for (Costumer cos : costumers) {
                         calculateDistance(cos,numberOfClusters);
                     }
+                    clusters.set(counter,c);
+                    counter++;
                 }
             }
 
@@ -57,20 +61,12 @@ public class Calculation {
                 result = new Result(error,clusters);
             }
         }
-        for (Cluster c : result.clusters) {
-            System.out.println(" Cluster id " + c.getClusterNR());
-            ArrayList<Costumer> cs = c.getPoints();
-            for (Costumer cos : cs) {
-                System.out.print(cos.getiD() + ", ");
-            }
-            System.out.println("");
-        }
-        System.out.println(result.error);
+        printResults(result);
     }
 
     public void calculateDistance(Costumer costumer, int numberOfClusters){
         double distance = 0;
-        int clusterNR = 0;
+        int clusterNumber = 0;
         int counter = 0;
         for (Costumer centroid : centroids) {
                 HashMap<Integer, Double> centroidDem = centroid.getItems();
@@ -89,17 +85,33 @@ public class Calculation {
                 double tempDistance = Math.sqrt(sum);
                 if (tempDistance < distance || distance == 0) {
                     distance = tempDistance;
-                    clusterNR = counter;
+                    clusterNumber = counter;
                 }
             counter++;
         }
 
-        if (clusterNR >= numberOfClusters){
-            clusterNR = (numberOfClusters - 1);
-        }
-        if(!clusters.get(clusterNR).getPoints().contains(costumer)){
-            clusters.get(clusterNR).addPoint(costumer);
-        }
+//        if(!clusters.get(clusterNumber).getPoints().contains(costumer)) {
+            Cluster cluster = clusters.get(clusterNumber);
+            cluster.addPoint(costumer);
+            clusters.set(clusterNumber,cluster);
+//        }
+    }
 
+    private void printResults(Result result){
+        for (Cluster c : result.clusters) {
+            Map<Integer,Integer> map = c.mostSoldItems();
+            System.out.println(" Cluster id " + c.getClusterNR());
+            for(Map.Entry<Integer ,Integer> entry : map.entrySet()){
+                System.out.println(" Item Number: "+entry.getKey()+" Times: "+entry.getValue());
+            }
+
+            System.out.println(" Cluster id " + c.getClusterNR());
+            ArrayList<Costumer> cs = c.getPoints();
+            for (Costumer cos : cs) {
+                System.out.print(cos.getiD() + ", ");
+            }
+            System.out.println("");
+        }
+        System.out.println(result.error);
     }
 }

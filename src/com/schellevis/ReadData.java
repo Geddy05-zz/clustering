@@ -15,7 +15,6 @@ public class ReadData {
             final Scanner data = new Scanner(new FileReader("WineData.csv"));
             int item = 0;
             while (data.hasNext()) {
-                System.out.println("item " + item);
                 final String[] columns = data.nextLine().split(",");
                 for (int i = 0; i < columns.length; i++){
                     if( item == 0){
@@ -27,9 +26,6 @@ public class ReadData {
                     }
                 }
                 item++;
-            }
-            for (Costumer c:costumers) {
-                System.out.println(c.getItems());
             }
         }
 
