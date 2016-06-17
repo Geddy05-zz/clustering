@@ -40,7 +40,11 @@ public class Cluster {
             for (Costumer costumer : points){
                 sum += costumer.getItems().get(item.getKey());
             }
-            centerCluster.updateItems(item.getKey(),(sum / numberOfPoints));
+            if(sum > 0) {
+                centerCluster.updateItems(item.getKey(), (sum / numberOfPoints));
+            }else{
+                centerCluster.updateItems(item.getKey(), 0.0);
+            }
         }
     }
 
@@ -65,7 +69,7 @@ public class Cluster {
                 totaalSold  += costumer.getItems().get(item.getKey()).intValue();
             }
             totaal += totaalSold;
-            System.out.println("Item: "+item.getKey()+ " Amount: "+totaalSold);
+//            System.out.println("Item: "+item.getKey()+ " Amount: "+totaalSold);
             items.put(item.getKey(),totaalSold);
         }
 

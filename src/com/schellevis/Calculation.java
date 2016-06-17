@@ -18,13 +18,15 @@ public class Calculation {
 
 
     public void createClusters(ArrayList<Costumer> costumers, int numberOfClusters){
-        for (int numberOfTry = 0; numberOfTry <= 40; numberOfTry++){
+        for (int numberOfTry = 0; numberOfTry <= 30; numberOfTry++){
             clusters = new ArrayList<>();
             centroids = new ArrayList<>();
             for (int i = 0; i < numberOfClusters; i++) {
                 int clusterNR = rand.nextInt(costumers.size());
-                centroids.add(costumers.get(clusterNR));
-                clusters.add(new Cluster(i, costumers.get(clusterNR)));
+                HashMap<Integer, Double> tempValues =  new HashMap<>(costumers.get(clusterNR).getItems());
+                Costumer cost = new Costumer(clusterNR+50,tempValues);
+                centroids.add(cost);
+                clusters.add(new Cluster(i, cost));
             }
             for (Costumer c : costumers) {
                 calculateDistance(c,numberOfClusters);
@@ -35,12 +37,15 @@ public class Calculation {
                 for (Cluster c : clusters) {
                     c.recalculateCenter();
                     c.emptyPoints();
-
+                    clusters.set(counter,c);
+                    counter++;
+                }
+                for (Cluster c : clusters) {
                     for (Costumer cos : costumers) {
                         calculateDistance(cos,numberOfClusters);
                     }
-                    clusters.set(counter,c);
-                    counter++;
+//                    clusters.set(counter,c);
+//                    counter++;
                 }
             }
 
@@ -90,20 +95,20 @@ public class Calculation {
             counter++;
         }
 
-//        if(!clusters.get(clusterNumber).getPoints().contains(costumer)) {
+        if(!clusters.get(clusterNumber).getPoints().contains(costumer)) {
             Cluster cluster = clusters.get(clusterNumber);
             cluster.addPoint(costumer);
             clusters.set(clusterNumber,cluster);
-//        }
+        }
     }
 
     private void printResults(Result result){
         for (Cluster c : result.clusters) {
             Map<Integer,Integer> map = c.mostSoldItems();
-            System.out.println(" Cluster id " + c.getClusterNR());
-            for(Map.Entry<Integer ,Integer> entry : map.entrySet()){
-                System.out.println(" Item Number: "+entry.getKey()+" Times: "+entry.getValue());
-            }
+//            System.out.println(" Cluster id " + c.getClusterNR());
+//            for(Map.Entry<Integer ,Integer> entry : map.entrySet()){
+//                System.out.println(" Item Number: "+entry.getKey()+" Times: "+entry.getValue());
+//            }
 
             System.out.println(" Cluster id " + c.getClusterNR());
             ArrayList<Costumer> cs = c.getPoints();
