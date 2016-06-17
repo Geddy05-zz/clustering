@@ -32,7 +32,7 @@ public class Calculation {
                 calculateDistance(c,numberOfClusters);
             }
 
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < 25; i++) {
                 int counter = 0;
                 for (Cluster c : clusters) {
                     c.recalculateCenter();
@@ -105,10 +105,10 @@ public class Calculation {
     private void printResults(Result result){
         for (Cluster c : result.clusters) {
             Map<Integer,Integer> map = c.mostSoldItems();
-//            System.out.println(" Cluster id " + c.getClusterNR());
-//            for(Map.Entry<Integer ,Integer> entry : map.entrySet()){
-//                System.out.println(" Item Number: "+entry.getKey()+" Times: "+entry.getValue());
-//            }
+            System.out.println(" Cluster id " + c.getClusterNR());
+            for(Map.Entry<Integer ,Integer> entry : map.entrySet()){
+                System.out.println(" Item Number: "+entry.getKey()+" Times: "+entry.getValue());
+            }
 
             System.out.println(" Cluster id " + c.getClusterNR());
             ArrayList<Costumer> cs = c.getPoints();
